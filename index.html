@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Web Crypto Demo</title>
+  </head>
+
+  <body>
+    <main>
+      <h1>Client-side Passphrase Encryption and Decyption</h1>
+
+      <section class="description">
+        <p>
+          This page allows you to do passphrase encryption and decryption of text. It uses the AES-GCM algorithm to encrypt the data.
+        </p>
+
+        <p>
+          The generated ciphertext and initialization vectors are safe to send in plaintext, but do not send or store your passphrase in plain text!
+        </p>
+        <hr/>
+      </section>
+
+      <section class="encrypt-decrypt aes-gcm">
+        <h2 class="encrypt-decrypt-heading">Encrypt</h2>
+        <section class="encrypt-decrypt-controls">
+          <div class="message-control">
+            <label for="aes-gcm-message">Enter a message to encrypt:</label>
+            <input type="text" id="aes-gcm-message" name="message" size="25"
+                   value="The bunny hops at teatime">
+          </div>
+
+          <div class="message-control">
+            <label for="aes-gcm-passphrase">Enter a passphrase:</label>
+            <input type="password" id="aes-gcm-passphrase" name="passphrase" size="25"
+                   placeholder="password123">
+          </div>
+
+          <input class="encrypt-button" type="button" value="Encrypt">
+
+          <div class="ciphertext">Ciphertext: <div class="ciphertext-value"></div></div>
+          <br>
+          <div class="ciphertext">ivMsg: <div class="ivMsg-value"></div></div>
+          <br>
+          <div class="ciphertext">ivKey: <div class="ivKey-value"></div></div>
+
+        </section>
+      </section>
+
+      <section class="encrypt-decrypt aes-gcm">
+        <h2 class="encrypt-decrypt-heading">Decrypt</h2>
+        <section class="encrypt-decrypt-controls">
+          <div class="message-control">
+            <label for="aes-gcm-dec-message">Enter ciphertext to decrypt:</label>
+            <input type="text" id="aes-gcm-dec-message" name="dec-message" size="25">
+          </div>
+
+          <div class="message-control">
+            <label for="aes-gcm-dec-ivMsg">Enter the ivMsg used to encrypt:</label>
+            <input type="text" id="aes-gcm-dec-ivMsg" name="dec-ivMsg" size="25">
+          </div>
+
+          <div class="message-control">
+            <label for="aes-gcm-dec-ivKey">Enter the ivKey used to encrypt:</label>
+            <input type="text" id="aes-gcm-dec-ivKey" name="dec-ivKey" size="25">
+          </div>
+
+          <div class="message-control">
+            <label for="aes-gcm-dec-pass">Enter the passphrase used to encrypt:</label>
+            <input type="password" id="aes-gcm-dec-pass" name="dec-pass" size="25">
+          </div>
+
+          <input class="decrypt-button" type="button" value="Decrypt">
+
+          <div class="decrypted">Decrypted message: <div class="decrypted-value"></div></div>
+        </section>
+      </section>
+    </main>
+
+  </body>
+
+  <script src="aes-gcm.js"></script>
+</html>
