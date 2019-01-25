@@ -15,13 +15,13 @@
    * @returns {Promise<[CryptoKey,UInt8Array]>} 
    */
   function deriveKey(passphrase, salt) {
-    salt = salt || crypto.getRandomValues(new Uint8Array(8));
+    salt = salt || window.crypto.getRandomValues(new Uint8Array(32));
 
-    return crypto.subtle
+    return window.crypto.subtle
       .importKey("raw", passphrase, "PBKDF2", false, ["deriveKey"])
       .then(key =>
         crypto.subtle.deriveKey(
-          { name: "PBKDF2", salt, iterations: 1000, hash: "SHA-256" },
+          { name: "PBKDF2", salt, iterations: 10000, hash: "SHA-256" },
           key,
           { name: "AES-GCM", length: 256 },
           false,
