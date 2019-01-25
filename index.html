@@ -1,8 +1,171 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <title>Web Crypto Demo</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css?family=Roboto");
+      body,
+      input,
+      textarea {
+        font-family: "Roboto", sans-serif;
+      }
+      main {
+        padding: 100px;
+      }
+
+      .encrypt-decrypt-heading {
+        display: flex;
+        align-items: center;
+      }
+
+      .message-control {
+        display: flex;
+        justify-content: space-between;
+        width: 600px;
+        max-width: calc(100vw - 200px);
+        margin: 15px 0;
+      }
+
+      /* FANCY BUTTONS LOL */
+      @import "https://fonts.googleapis.com/css?family=Bungee+Shade";
+
+      button {
+        overflow: visible;
+        border: 0;
+        padding: 0;
+        margin: 1.8rem;
+      }
+      .btn.striped-shadow span {
+        display: block;
+        position: relative;
+        z-index: 2;
+        border: 5px solid;
+      }
+      .btn.striped-shadow.white span {
+        border-color: #fff;
+        color: #fff;
+        background: #77bfa1;
+      }
+
+      .btn.striped-shadow.blue span {
+        border-color: #4183d7;
+        background: #77bfa1;
+        color: #4183d7;
+      }
+      .btn.striped-shadow.dark span {
+        border-color: #393939;
+        background: white;
+        color: #393939;
+      }
+
+      .btn {
+        font-family: "Bungee Shade", sans-serif;
+        height: 80px;
+        line-height: 65px;
+        display: inline-block;
+        letter-spacing: 1px;
+        position: relative;
+        font-size: 1.35rem;
+        transition: opacity 0.3s, z-index 0.3s step-end, -webkit-transform 0.3s;
+        transition: opacity 0.3s, z-index 0.3s step-end, transform 0.3s;
+        transition: opacity 0.3s, z-index 0.3s step-end, transform 0.3s,
+          -webkit-transform 0.3s;
+        z-index: 1;
+        background-color: transparent;
+        cursor: pointer;
+      }
+
+      .btn {
+        width: 155px;
+        height: 48px;
+        line-height: 38px;
+      }
+
+      button.btn.striped-shadow.white:after,
+      button.btn.striped-shadow.white:before {
+        background-image: linear-gradient(
+          135deg,
+          transparent 0,
+          transparent 5px,
+          #fff 5px,
+          #fff 10px,
+          transparent 10px
+        );
+      }
+
+      button.btn.striped-shadow.blue:after,
+      button.btn.striped-shadow.blue:before {
+        background-image: linear-gradient(
+          135deg,
+          transparent 0,
+          transparent 5px,
+          #4183d7 5px,
+          #4183d7 10px,
+          transparent 10px
+        );
+      }
+
+      button.btn.striped-shadow.dark:after,
+      button.btn.striped-shadow.dark:before {
+        background-image: linear-gradient(
+          135deg,
+          transparent 0,
+          transparent 5px,
+          #393939 5px,
+          #393939 10px,
+          transparent 10px
+        );
+      }
+
+      button.btn.striped-shadow:hover:before {
+        max-height: calc(100% - 10px);
+      }
+
+      button.btn.striped-shadow:after {
+        width: calc(100% - 4px);
+        height: 8px;
+        left: -10px;
+        bottom: -9px;
+        background-size: 15px 8px;
+        background-repeat: repeat-x;
+      }
+      button.btn.striped-shadow:after,
+      button.btn.striped-shadow:before {
+        content: "";
+        display: block;
+        position: absolute;
+        z-index: 1;
+        transition: max-height 0.3s, width 0.3s, -webkit-transform 0.3s;
+        transition: transform 0.3s, max-height 0.3s, width 0.3s;
+        transition: transform 0.3s, max-height 0.3s, width 0.3s,
+          -webkit-transform 0.3s;
+      }
+
+      .btn.striped-shadow:hover {
+        -webkit-transform: translate(-12px, 12px);
+        -ms-transform: translate(-12px, 12px);
+        transform: translate(-12px, 12px);
+        z-index: 3;
+      }
+
+      button.btn.striped-shadow:hover:after,
+      button.btn.striped-shadow:hover:before {
+        -webkit-transform: translate(12px, -12px);
+        -ms-transform: translate(12px, -12px);
+        transform: translate(12px, -12px);
+      }
+      button.btn.striped-shadow:before {
+        width: 8px;
+        max-height: calc(100% - 5px);
+        height: 100%;
+        left: -12px;
+        bottom: -5px;
+        background-size: 8px 15px;
+        background-repeat: repeat-y;
+        background-position: 0 100%;
+      }
+    </style>
   </head>
 
   <body>
@@ -11,71 +174,130 @@
 
       <section class="description">
         <p>
-          This page allows you to do passphrase encryption and decryption of text. It uses the AES-GCM algorithm to encrypt the data.
+          This page allows you to do passphrase encryption and decryption of
+          text. It uses the AES-GCM algorithm to encrypt the data.
         </p>
 
         <p>
-          The generated ciphertext and initialization vectors are safe to send in plaintext, but do not send or store your passphrase in plain text!
+          The generated ciphertext and initialization vectors are safe to send
+          in plaintext, but
+          <strong>do not send or store your passphrase in plain text!</strong>
         </p>
-        <hr/>
+        <hr />
       </section>
 
       <section class="encrypt-decrypt aes-gcm">
-        <h2 class="encrypt-decrypt-heading">Encrypt</h2>
+        <h2 class="encrypt-decrypt-heading">
+          <span style="font-size: 60px; margin-right: 10px;">🔒</span> Encrypt
+        </h2>
         <section class="encrypt-decrypt-controls">
           <div class="message-control">
             <label for="aes-gcm-message">Enter a message to encrypt:</label>
-            <input type="text" id="aes-gcm-message" name="message" size="25"
-                   value="The bunny hops at teatime">
+            <input
+              type="text"
+              id="aes-gcm-message"
+              name="message"
+              size="25"
+              value="The bunny hops at teatime"
+            />
           </div>
 
           <div class="message-control">
             <label for="aes-gcm-passphrase">Enter a passphrase:</label>
-            <input type="password" id="aes-gcm-passphrase" name="passphrase" size="25"
-                   placeholder="password123">
+            <input
+              type="password"
+              id="aes-gcm-passphrase"
+              name="passphrase"
+              size="25"
+              placeholder="password123"
+            />
           </div>
 
-          <input class="encrypt-button" type="button" value="Encrypt">
-
-          <div class="ciphertext">Ciphertext: <div class="ciphertext-value"></div></div>
-          <br>
-          <div class="ciphertext">ivMsg: <div class="ivMsg-value"></div></div>
-          <br>
-          <div class="ciphertext">ivKey: <div class="ivKey-value"></div></div>
-
+          <!-- <input class="encrypt-button" type="button" value="Encrypt" /> -->
+          <button class="btn striped-shadow dark encrypt-button">
+            <span>Encrypt</span>
+          </button>
+          <div class="ciphertext">
+            Ciphertext:
+            <div class="ciphertext-value"></div>
+          </div>
+          <br />
+          <div class="ciphertext">
+            ivMsg:
+            <div class="ivMsg-value"></div>
+          </div>
+          <br />
+          <div class="ciphertext">
+            ivKey:
+            <div class="ivKey-value"></div>
+          </div>
         </section>
       </section>
 
       <section class="encrypt-decrypt aes-gcm">
-        <h2 class="encrypt-decrypt-heading">Decrypt</h2>
+        <h2 class="encrypt-decrypt-heading">
+          <span style="font-size: 60px; margin-right: 10px;">🔑</span> Decrypt
+        </h2>
         <section class="encrypt-decrypt-controls">
           <div class="message-control">
-            <label for="aes-gcm-dec-message">Enter ciphertext to decrypt:</label>
-            <input type="text" id="aes-gcm-dec-message" name="dec-message" size="25">
+            <label for="aes-gcm-dec-message"
+              >Enter ciphertext to decrypt:</label
+            >
+            <input
+              type="text"
+              id="aes-gcm-dec-message"
+              name="dec-message"
+              size="25"
+            />
           </div>
 
           <div class="message-control">
-            <label for="aes-gcm-dec-ivMsg">Enter the ivMsg used to encrypt:</label>
-            <input type="text" id="aes-gcm-dec-ivMsg" name="dec-ivMsg" size="25">
+            <label for="aes-gcm-dec-ivMsg"
+              >Enter the ivMsg used to encrypt:</label
+            >
+            <input
+              type="text"
+              id="aes-gcm-dec-ivMsg"
+              name="dec-ivMsg"
+              size="25"
+            />
           </div>
 
           <div class="message-control">
-            <label for="aes-gcm-dec-ivKey">Enter the ivKey used to encrypt:</label>
-            <input type="text" id="aes-gcm-dec-ivKey" name="dec-ivKey" size="25">
+            <label for="aes-gcm-dec-ivKey"
+              >Enter the ivKey used to encrypt:</label
+            >
+            <input
+              type="text"
+              id="aes-gcm-dec-ivKey"
+              name="dec-ivKey"
+              size="25"
+            />
           </div>
 
           <div class="message-control">
-            <label for="aes-gcm-dec-pass">Enter the passphrase used to encrypt:</label>
-            <input type="password" id="aes-gcm-dec-pass" name="dec-pass" size="25">
+            <label for="aes-gcm-dec-pass"
+              >Enter the passphrase used to encrypt:</label
+            >
+            <input
+              type="password"
+              id="aes-gcm-dec-pass"
+              name="dec-pass"
+              size="25"
+            />
           </div>
 
-          <input class="decrypt-button" type="button" value="Decrypt">
-
-          <div class="decrypted">Decrypted message: <div class="decrypted-value"></div></div>
+          <!-- <input class="decrypt-button" type="button" value="Decrypt" /> -->
+          <button class="btn striped-shadow dark decrypt-button">
+            <span>Decrypt</span>
+          </button>
+          <div class="decrypted">
+            Decrypted message:
+            <div class="decrypted-value"></div>
+          </div>
         </section>
       </section>
     </main>
-
   </body>
 
   <script src="aes-gcm.js"></script>
